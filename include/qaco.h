@@ -1,8 +1,7 @@
-#ifndef QANTHILL_H
-#define QANTHILL_H
+#ifndef QACO_H
+#define QACO_H
 
-#include <complex>
-
+#include "randomizer.h"
 #include "sparams.h"
 #include "qhill.h"
 #include "qworld.h"
@@ -13,19 +12,13 @@
 //------------------------------------------------------------
 
 namespace QAnthill {
-//------------------------------------------------------------
-
-static MPI_Comm QAnthillInit( int* argc, char*** argv );
-static bool QAnthillInitialized();
-static void QAnthillFinilize();
-
 //-----------------------------------------------------------
 
-class QAnthillProcess
+class QACOProcess
 {
 public:
-    QAnthillProcess( const SParams& params, MPI_Comm comm = MPI_COMM_WORLD );
-    ~QAnthillProcess();
+    QACOProcess( const SParams& params, MPI_Comm comm = MPI_COMM_WORLD );
+    ~QACOProcess();
 
     double process();
 
@@ -37,10 +30,12 @@ private:
 private:
     SParams m_params;
 
-    struct SQAnthillProcessContext;
-    SQAnthillProcessContext* m_ctx;
+    struct SQACOProcessContext;
+    SQACOProcessContext* m_ctx;
 
 	QHill* m_localHill;
+
+    Randomizer* m_randomizer;
 };
 
 //-----------------------------------------------------------

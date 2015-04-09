@@ -14,9 +14,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\qanthill.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\pugixml.cpp">
       <Filter>pugixml</Filter>
     </ClCompile>
@@ -32,11 +29,14 @@
     <ClCompile Include="src\qworld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\qaco.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\randomizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\qanthill.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,9 +58,6 @@
     <ClInclude Include="include\mtrand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\sharedmtrand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\sqant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,6 +65,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\interfaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\qaco.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\qbit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\random_def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\random_mtrand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\randomizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

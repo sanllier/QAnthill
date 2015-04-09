@@ -2,10 +2,10 @@
 #define QWORLD_H
 
 #include <vector>
-#include <complex>
 #include <string>
 
 #include "defs.h"
+#include "qbit.h"
 #include "mpi.h"
 
 //------------------------------------------------------------
@@ -18,8 +18,8 @@ class QWorld
 public:
     struct SNode
     {
-        QComplex pheromone;
-        float    heuristic;
+        QBit     pheromone;
+        BASETYPE heuristic;
         int      idx;
     };
 
@@ -29,12 +29,11 @@ public:
 
     int nodesNum() const { return m_graph.size(); }
 
-    const std::vector< SNode >& getSiblings( int node ) const;
+    const std::vector< SNode >& getNeighbors( int node ) const;
 
     void setInitialPheromone();
-    void setHeuristic( const std::vector< std::vector<float> >& heuristicData );
+    void setHeuristic( const std::vector< std::vector< BASETYPE > >& heuristicData );
 
-    int addNode( int node, const std::vector< SNode >& siblings );
 	void loadFromFile( MPI_Comm comm, const std::string& fileName );
 	
 private:

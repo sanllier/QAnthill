@@ -13,9 +13,10 @@
   <ItemGroup>
     <ClCompile Include="src\mtrand.cpp" />
     <ClCompile Include="src\pugixml.cpp" />
-    <ClCompile Include="src\qanthill.cpp" />
+    <ClCompile Include="src\qaco.cpp" />
     <ClCompile Include="src\qhill.cpp" />
     <ClCompile Include="src\qworld.cpp" />
+    <ClCompile Include="src\randomizer.cpp" />
     <ClCompile Include="src\sparams.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,11 +26,15 @@
     <ClInclude Include="include\mtrand.h" />
     <ClInclude Include="include\pugiconfig.hpp" />
     <ClInclude Include="include\pugixml.hpp" />
+    <ClInclude Include="include\qbit.h" />
+    <ClInclude Include="include\random.h" />
+    <ClInclude Include="include\randomizer.h" />
+    <ClInclude Include="include\random_def.h" />
+    <ClInclude Include="include\random_mtrand.h" />
     <ClInclude Include="include\sqant.h" />
-    <ClInclude Include="include\qanthill.h" />
+    <ClInclude Include="include\qaco.h" />
     <ClInclude Include="include\qhill.h" />
     <ClInclude Include="include\qworld.h" />
-    <ClInclude Include="include\sharedmtrand.h" />
     <ClInclude Include="include\sparams.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -71,7 +76,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>STDRAND;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)Microsoft MPI\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>

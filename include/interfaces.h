@@ -11,18 +11,18 @@
 namespace QAnthill {
 //------------------------------------------------------------
 
-class IRestrition
+class IFitness
 {
-    virtual ~IRestrition() {}
-    virtual const std::vector< bool >& restricts( const SQAnt& ant, const std::vector< QWorld::SNode >& siblings ) = 0;
+    virtual ~IFitness() {}
+    virtual BASETYPE operator()( const SQAnt::Trace& trace, const QWorld& world ) = 0;
 };
 
 //------------------------------------------------------------
 
-class IFitness
+class IRestriction
 {
-    virtual ~IFitness() {}
-    virtual const BASETYPE compute( const SQAnt::Trace& trace, const QWorld& world ) = 0;
+    virtual ~IRestriction() {}
+    virtual const std::vector< bool >& operator()( int pos, const QWorld& world ) = 0;
 };
 
 //------------------------------------------------------------

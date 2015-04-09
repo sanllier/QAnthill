@@ -20,16 +20,17 @@ public:
     QHill( MPI_Comm baseComm, const SParams& params );
 	~QHill();
 
-    void process();
+    void run();
 
 private:
 	MPI_Comm m_comm;
 
     QWorld* m_world;
-    std::vector<SQAnt> m_hill;
+    std::vector< SQAnt > m_hill;
 
-    float heuristicInfluence;
-    float pheromoneInfluence;
+    float m_heuristicInfluence;
+    float m_pheromoneInfluence;
+    float m_choosePathConst;
 };
 
 //-----------------------------------------------------------

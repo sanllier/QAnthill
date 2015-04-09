@@ -9,7 +9,7 @@
 namespace QAnthill {
 //------------------------------------------------------------
 
-struct SQAnt
+class SQAnt
 {
 public:
     class Trace
@@ -24,7 +24,7 @@ public:
         long long getValidLen() const { return m_tracePos; } 
         std::vector< int > getTrace() { return m_trace; }
         const std::vector< int > getTrace() const { return m_trace; }
-        void add( const int& pos ) 
+        void add( const int& pos )
         {
             if ( m_size < m_tracePos )
             {
@@ -48,6 +48,7 @@ public:
     };
 
 public:
+    int   startPos;
     int   curPos;
     Trace trace;
 };

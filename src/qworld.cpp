@@ -1,5 +1,6 @@
 #include "qworld.h"
 #include "mpicheck.h"
+#include "randomizer.h"
 
 #include <math.h>
 
@@ -8,7 +9,7 @@
 namespace QAnthill {
 //------------------------------------------------------------
 
-const std::vector< QWorld::SNode >& QWorld::getSiblings( int node ) const
+const std::vector< QWorld::SNode >& QWorld::getNeighbors( int node ) const
 {
     static std::vector< QWorld::SNode > dummy;
     if ( node >= (int)m_graph.size() )
@@ -21,55 +22,36 @@ const std::vector< QWorld::SNode >& QWorld::getSiblings( int node ) const
 
 void QWorld::setInitialPheromone()
 {
-    const float initialPheromone = 1.0f / sqrtf(2.0f);
+    const BASETYPE initialPheromone = BASETYPE(1) / sqrtf(2.0f);
 
     for ( int i = 0; i < (int)m_graph.size(); ++i )
-        for ( int q = 0; q < (int)m_graph[q].size(); ++q )
-            m_graph[i][q].pheromone = QComplex( initialPheromone, initialPheromone );
-}
-
-//------------------------------------------------------------
-
-void QWorld::setHeuristic( const std::vector< std::vector<float> >& heuristicData )
-{
-    m_graph.clear();
-
-    const float initialPheromone = 1.0f / sqrtf(2.0f);
-
-    for ( int i = 0; i < (int)heuristicData.size(); ++i )
     {
-        bool firstNode = true;
-        for ( int q = 0; q < (int)heuristicData[i].size(); ++q )
+        for ( int q = 0; q < (int)m_graph[i].size(); ++q )
         {
-            if ( heuristicData[i][q] != 0.0f )
-            {
-                if ( firstNode )
-                {
-                    m_graph.push_back( std::vector< SNode >() );
-                    firstNode = false;
-                }
-                SNode tempNode;
-                tempNode.heuristic = heuristicData[i][q];
-                tempNode.pheromone = QComplex( initialPheromone, initialPheromone );
-                tempNode.idx       = q;
-                m_graph.back().push_back( tempNode );
-            }
+            m_graph[i][q].pheromone.a = Randomizer::Get()->nextBasetype();
+            m_graph[i][q].pheromone.b = sqrt( QComplex( BASETYPE(1) ) - m_graph[i][q].pheromone.a );
         }
     }
 }
-  
+
 //------------------------------------------------------------
 
-int QWorld::addNode( int node, const std::vector< QWorld::SNode >& siblings )
+void QWorld::setHeuristic( const std::vector< std::vector< BASETYPE > >& heuristicData )
 {
-    if ( node >= (int)m_graph.size() )
+    m_graph.resize( heuristicData.size() );
+    for ( int i = 0; i < (int)heuristicData.size(); ++i )
     {
-        m_graph.push_back( siblings );
-        return m_graph.size() - 1;
+        for ( int q = 0; q < (int)heuristicData[i].size(); ++q )
+        {
+            if ( heuristicData[i][q] != BASETYPE(0) )
+            {
+                SNode tempNode;
+                tempNode.heuristic = heuristicData[i][q];
+                tempNode.idx       = q;
+                m_graph[i].push_back( tempNode );
+            }
+        }
     }
-
-    m_graph.insert( m_graph.begin() + node, siblings );
-    return node;
 }
 
 //------------------------------------------------------------
@@ -97,17 +79,31 @@ void QWorld::loadFromFile( MPI_Comm comm, const std::string& fileName )
     if ( nodesNum <= 0 )
         throw std::string( "Invalid data file format. " ).append( __FUNCTION__ );
 
+    std::vector< BASETYPE > buf;
+    MPI_Offset offset = sizeof(int);
     for ( int i = 0; i < nodesNum; ++i )
     {
-        MPI_Offset offset = ( i + 1 ) * sizeof(int) + i * sizeof( SNode );
-
-        int siblingsNum = 0;        
-        CHECK( MPI_File_read_at_all( fp, offset, &nodesNum, 1, MPI_INT, &status ) );
-        if ( siblingsNum <= 0 )
+        int neighborsNum = 0;        
+        CHECK( MPI_File_read_at_all( fp, offset, &neighborsNum, 1, MPI_INT, &status ) );
+        offset += sizeof(int);
+        if ( neighborsNum <= 0 )
             throw std::string( "Invalid data file format. " ).append( __FUNCTION__ );
 
-        m_graph[i].resize( siblingsNum );
-        CHECK( MPI_File_read_at_all( fp, offset + sizeof(int), &m_graph[i][0], sizeof( SNode ) * siblingsNum, MPI_CHAR, &status ) );
+        m_graph[i].resize( neighborsNum );
+        buf.resize( neighborsNum );
+        CHECK( MPI_File_read_at_all( fp, offset, &buf[0], neighborsNum, MPI_BASETYPE, &status ) );
+        offset += sizeof( BASETYPE ) * neighborsNum;
+
+        for ( int q = 0; q < neighborsNum; ++q )
+        {
+            if ( buf[q] != BASETYPE(0) )
+            {
+                SNode tempNode;
+                tempNode.heuristic = buf[q];
+                tempNode.idx       = q;
+                m_graph[i].push_back( tempNode );
+            }
+        }
     }
 
     CHECK( MPI_File_close( &fp ) );
